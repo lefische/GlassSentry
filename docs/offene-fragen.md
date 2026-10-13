@@ -3,9 +3,9 @@
 Bereits beantwortete Punkte stehen in [anforderungen.md](anforderungen.md).
 
 ## Noch offen
-1. Wie wird der ZIP-Screen in HA angesteuert (Integration, z. B. Shelly, Somfy, KNX)? Gibt es außerdem Handsender oder Wandtaster?
-   Davon hängt ab, ob ein Laufzeit-Cover die Position zuverlässig errechnen kann.
-2. Welche Wetterintegration ist es (z. B. Met.no, DWD, OpenWeatherMap, eigene Station)?
+1. Stellt die Homematic-Integration in HA beim Screen-Aktor einen Positionswert bereit
+   (Attribut `current_position` bzw. `LEVEL`)? Das lässt sich unter Entwicklerwerkzeuge → Zustände prüfen.
+   Ist der Wert vorhanden, brauchen wir kein Laufzeit-Cover.
 
 ## Beantwortet
 **2026-10-13, Runde 1**
@@ -36,3 +36,7 @@ Bereits beantwortete Punkte stehen in [anforderungen.md](anforderungen.md).
 - Die Screen-Position ist in HA nicht bekannt
 - Eine Wetterintegration ist vorhanden
 - Eigentum
+
+**2026-10-13, Runde 5**
+- Der Screen wird über Homematic angesteuert, auch aus HA; manuelle Betätigungen sind in HA auslesbar
+- Wetterintegration: Met.no

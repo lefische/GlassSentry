@@ -1,6 +1,6 @@
 # Anforderungen & Rahmenbedingungen
 
-Stand: 2026-10-13 – aus vier Abstimmungsrunden zu den [offenen Fragen](offene-fragen.md).
+Stand: 2026-10-13 – aus fünf Abstimmungsrunden zu den [offenen Fragen](offene-fragen.md).
 
 ## 1. Ausgangslage
 
@@ -13,7 +13,8 @@ Stand: 2026-10-13 – aus vier Abstimmungsrunden zu den [offenen Fragen](offene-
 - **Ausrichtung:** Süden.
 - **Betroffen sind bisher:** die festen Fenster und die Schiebetür.
 - **Sonnenschutz:** elektrischer **ZIP-Screen**, ca. 5 cm vor der Scheibe, über
-  Home Assistant steuerbar. Die **Position** meldet er in HA **nicht**.
+  Home Assistant steuerbar. Die Ansteuerung läuft über **Homematic**. Manuelle Betätigungen
+  (Taster/Handsender) lassen sich in HA auslesen. Die **Position** ist in HA derzeit **nicht** bekannt.
 - **Eigentum:** Kleben und notfalls Schrauben am Rahmen sind möglich.
 - **Häufigkeit:** unbekannt, das soll ja gemessen werden. Vermutung: vor allem
   **im Sommer und am Nachmittag**.
@@ -31,7 +32,7 @@ Stand: 2026-10-13 – aus vier Abstimmungsrunden zu den [offenen Fragen](offene-
 - Ein Zigbee-Netz läuft schon, mit Türkontakten. An den Fenstern gibt es noch keine Kontakte.
 - MQTT ist noch nicht eingerichtet, kann aber eingeführt werden.
 - ESPHome wird noch nicht genutzt, kann aber eingeführt werden.
-- Eine Wetterintegration ist vorhanden.
+- Wetterintegration: **Met.no** (Meteorologisk institutt).
 
 ### Zielsetzung
 - **Hauptziel ist die Statistik:** Es soll erfasst werden, wie oft, wo und wann Vögel gegen die Fenster fliegen.
@@ -179,15 +180,28 @@ eventuell den Rahmen berühren. Ein ZIP-Screen flattert kaum, weil er in den Sch
 | **B – Helligkeitssensor im Sensorknoten** | kleiner Lichtsensor (z. B. VEML7700, ca. 2×2 mm), der durch die Scheibe misst: Screen unten → Helligkeit bricht stark ein | unabhängig von der Bedienart, liefert **zusätzlich die Sonneneinstrahlung je Fenster**. Das ist eine gute Größe für die Spiegelung. Kostet etwas Strom und Platz |
 | **C – Motorlauf erkennen** | Der Vibrationssensor spürt den Screen-Motor im Rahmen | nur für Fahrbeginn und Fahrende, nicht für die Position; trotzdem nützlich zum Markieren |
 
-**Vorschlag:** **A** sofort in HA umsetzen. **B** im Proof of Concept mit erproben.
-**C** nutzen wir ohnehin automatisch.
+**Entscheidung:** Der Screen hängt an Homematic, und manuelle Betätigungen sind in HA
+sichtbar. Damit funktioniert **Weg A zuverlässig**: Jeder Fahrbefehl, egal ob aus HA, vom Taster
+oder vom Handsender, kommt im Laufzeit-Cover an.
 
-### 2.6c Wetter
-- Die vorhandene Wetterintegration liefert zu jedem Ereignis den Kontext: Wind, Niederschlag
-  und Bewölkung.
-- Hagel ist in den meisten Integrationen nur indirekt erkennbar, über Wetterzustand oder
-  Warnungen (z. B. DWD-Integration). Für die Statistik reicht das, weil wir ohnehin nur markieren
-  und nichts verwerfen.
+- **Vorher prüfen:** Homematic(IP)-Rollladenaktoren (z. B. HmIP-BROLL/-FROLL) rechnen die
+  Position oft schon selbst aus Fahrzeiten aus (Wert `LEVEL`). Wird dieser Wert über die
+  HA-Integration bereitgestellt, z. B. mit *Homematic(IP) Local*, haben wir die Position direkt.
+  Dann brauchen wir kein Laufzeit-Cover.
+- **B** (Lichtsensor) bleibt als optionaler Zusatz im Proof of Concept. Er dient dann vor allem
+  dazu, die Sonneneinstrahlung je Fenster zu messen, nicht mehr dazu, die Screen-Position zu bestimmen.
+- **C** (Motorlauf im Sensor) nutzen wir ohnehin automatisch.
+
+### 2.6c Wetter (Met.no)
+- **Met.no liefert** Wetterzustand, Temperatur, Windgeschwindigkeit, Böen, Windrichtung,
+  Bewölkungsgrad und Niederschlag. Diese Werte speichern wir zu jedem Ereignis als Kontext.
+- **Einschränkung:** Es handelt sich um **Modell- und Vorhersagewerte** für den Standort, nicht um
+  Messwerte am Haus. Ein lokaler Schauer oder Hagel kann fehlen. Für eine grobe Einordnung
+  („windig“, „Regen“, „sonnig“) reicht das. Wir markieren ja nur und verwerfen nichts.
+- **Optional:** Die Integration **DWD Weather Warnings** ergänzt amtliche Warnungen,
+  u. a. vor Gewitter, Hagel und Sturm. Das ist kostenlos und schnell eingerichtet.
+- **Optional später:** Eine kleine eigene Wetterstation oder ein Regensensor würde lokale
+  Messwerte liefern, falls sich zeigt, dass Wetter-Fehlalarme häufig sind.
 
 ### 2.6b Holz-Alu-Rahmen
 - **Innen Holz:** Holz dämpft Schwingungen. Ein Sensor am Rahmen bekommt deshalb
