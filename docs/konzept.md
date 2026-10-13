@@ -5,18 +5,23 @@ Vogelschlag an Fenstern relevant sind. Es ist bewusst breit angelegt und wird
 nach der Klärung der [offenen Fragen](offene-fragen.md) zu einer konkreten
 Architektur verdichtet.
 
+> **Stand 2026-10-13:** Die ersten Rahmenbedingungen sind geklärt: 3-fach-Glas,
+> Batteriesensoren mit Gateway am Netz, Ziel ist die Statistik. Daraus abgeleitete
+> Festlegungen und angepasste Prioritäten stehen in [anforderungen.md](anforderungen.md).
+> Diese haben Vorrang vor den allgemeinen Optionen unten.
+
 ---
 
 ## 1. Ziele
 
-| # | Ziel | Priorität (Vorschlag) |
+| # | Ziel | Priorität |
 |---|------|-----------------------|
 | Z1 | Vogelschlag zuverlässig erkennen (Zeitpunkt, welches Fenster) | Muss |
 | Z2 | Ereignis an Home Assistant melden und dort protokollieren | Muss |
-| Z3 | Sofort-Benachrichtigung, damit man nach einem benommenen Vogel sehen kann | Soll |
+| Z3 | Sofort-Benachrichtigung, damit man nach einem benommenen Vogel sehen kann | Kann |
 | Z4 | Stärke des Aufpralls schätzen (leichter Streifer vs. harter Aufprall) | Soll |
-| Z5 | Statistik: Häufung nach Fenster, Uhrzeit, Jahreszeit, Sonnenstand | Soll |
-| Z6 | Wirksamkeit von Schutzmaßnahmen (Markierungen, Folien) vorher/nachher bewerten | Kann |
+| Z5 | Statistik: Häufung nach Fenster, Uhrzeit, Jahreszeit, Sonnenstand | Muss |
+| Z6 | Wirksamkeit von Schutzmaßnahmen (Markierungen, Folien) vorher/nachher bewerten | Soll |
 | Z7 | Fotobeleg / Artbestimmung per Kamera | Kann |
 
 **Nicht-Ziele (vorerst):** Vögel aktiv vertreiben, Erkennung von Einbruch/Glasbruch
@@ -44,6 +49,7 @@ Was wir messen wollen, und wie es sich von Störquellen unterscheidet.
 |--------|------------------------|
 | Klopfen mit der Hand | meist mehrere Impulse in kurzer Folge; oft von innen |
 | Tür zuschlagen / Schritte | betrifft **alle** Fenster gleichzeitig (Gleichtakt), tieffrequent, über den Rahmen |
+| Haustiere, Roboter, Gartenmöbel (bodentiefe Scheiben) | Einzelimpuls möglich → Putz-/Scharf-Schalter, Labeling, ggf. Kamera |
 | Wind / Böen | langsamer Druckverlauf (< 20 Hz), kein scharfer Impuls |
 | Regen | sehr viele, sehr schwache Impulse (Tropfen ≈ 1 mJ) |
 | **Hagel** | Impulse ähnlich stark wie kleine Vögel (2-cm-Korn ≈ 0,8 J), aber in Serie → über Wetterdaten aus HA ausschließbar |
@@ -163,6 +169,7 @@ Erschütterung.
 | ESP32-S3 / ESP32-C3 | WLAN | ESPHome/MQTT, viel Rechenleistung, günstig | WLAN-Verbindungsaufbau kostet Strom |
 | ESP32-C6 / ESP32-H2 | Zigbee / Thread (+WLAN beim C6) | stromsparend, Mesh, Matter möglich | Firmware aufwändiger |
 | nRF52840 | BLE / Thread / Zigbee | sehr stromsparend | eigene Firmware nötig |
+| ESP-NOW (ESP32 ↔ ESP32) | proprietär, 2,4 GHz | kein WLAN-Login, sehr kurze Aktivzeit, Gateway leitet weiter | braucht ein Gateway |
 
 → Abhängig von der vorhandenen Infrastruktur (siehe offene Fragen).
 

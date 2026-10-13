@@ -1,36 +1,30 @@
 # Offene Fragen
 
-Antworten bitte direkt hier eintragen (oder im Chat) – daraus leiten wir die
-Architekturentscheidungen ab.
+Bereits beantwortete Punkte stehen in [anforderungen.md](anforderungen.md).
 
-## A. Fenster & Umgebung
-1. Wie viele Fenster sollen überwacht werden, und welche sind erfahrungsgemäß betroffen?
-2. Größe der Scheiben, Festverglasung oder Flügel (öffnen/kippen)? Bodentiefe Fenster, Wintergarten, Glasgeländer?
-3. Verglasung: Einfach-, 2-fach- oder 3-fach-Isolierglas?
-4. Ausrichtung (Himmelsrichtung), Spiegelungen von Bäumen/Himmel, Vogelfutterstelle in der Nähe?
-5. Wie häufig passiert Vogelschlag heute ungefähr (pro Monat/Jahr)?
-6. Eigentum oder Miete (Montage/Kleben)?
+## Noch offen
 
-## B. Strom & Funk
-7. Steckdosen in Fensternähe vorhanden, oder soll alles batteriebetrieben sein?
-8. WLAN-Abdeckung an den Fenstern gut?
-9. Gibt es bereits Zigbee / Thread / Matter im Haus?
+### A. Fenster & Umgebung
+1. Wie viele Fenster gibt es im **Obergeschoss**, und sollen alle überwacht werden?
+2. Sind die bodentiefen Fenster im EG Fest-, Dreh-/Kipp- oder Schiebeelemente (z. B. Terrassentür, Hebe-Schiebe-Tür)?
+3. Welche Fenster sind erfahrungsgemäß betroffen, und wie oft passiert es ungefähr?
+4. In welche Himmelsrichtungen zeigen die Fenster? Gibt es Spiegelungen von Bäumen oder Himmel, oder eine Futterstelle in der Nähe?
+5. Gibt es Haustiere, Kinder oder Mäh-/Saugroboter in Fensternähe? Das wären Störquellen.
+6. Eigentum oder Miete? Davon hängt ab, wie geklebt werden darf.
 
-## C. Home Assistant
-10. Welche Installation (HA OS, Container, Supervised) und Version?
-11. Gibt es schon einen MQTT-Broker (Mosquitto)? Wird ESPHome genutzt?
-12. Wie wird protokolliert – nur Recorder, oder InfluxDB/Grafana o. ä.?
-13. Vorhandene Wetterintegration/Wetterstation (für Hagel/Regen/Wind-Filter)?
-14. Fensterkontakte vorhanden?
-15. Gibt es Kameras, die auf die Fenster bzw. davor blicken?
+### B. Home Assistant
+7. Welche Installation (HA OS, Container, Supervised) und welche Version? Davon hängt ab, wie der MQTT-Broker eingerichtet wird (Mosquitto-Add-on oder separat).
+8. Wird außer dem Standard-Recorder schon etwas zur Protokollierung genutzt (InfluxDB, Grafana)? Wenn nicht: Soll das für die Statistik eingeführt werden?
+9. Gibt es eine Wetterintegration oder Wetterstation, damit sich Hagel, Regen und Wind herausfiltern lassen?
 
-## D. Anforderungen
-16. Was ist wichtiger: sofortige Benachrichtigung (Vogel retten) oder Statistik (Schutzmaßnahmen bewerten)?
-17. Wie viele Fehlalarme sind akzeptabel (z. B. 1 pro Woche)? Lieber etwas verpassen oder lieber zu viel melden?
-18. Ist ein Kamerabeleg gewünscht?
-19. Optik: Wie unauffällig muss der Sensor sein?
+### C. Rahmenbedingungen
+10. Budget pro Fenster bzw. insgesamt?
+11. Wie unauffällig muss der Sensor sein, gerade an den großen bodentiefen Scheiben?
+12. Welche Fehlerrate ist für die Statistik akzeptabel? Lieber Ereignisse verpassen oder lieber einige Fehlalarme mitzählen?
 
-## E. Rahmenbedingungen
-20. Budget pro Fenster bzw. gesamt?
-21. Eigene Fähigkeiten/Werkzeug: Löten, 3D-Drucker, Programmieren (C++, Python, YAML)?
-22. Bevorzugte Firmware-Basis: ESPHome (YAML, bequem) oder eigene Firmware (flexibler)?
+## Beantwortet (2026-10-13)
+- Verglasung und Anzahl: 3-fach, 6 bodentiefe Fenster im EG, Fenster im OG ca. 1,5 m hoch
+- Strom: Sensoren mit Batterie, Gateway an der Steckdose, Proof of Concept auch am Netz
+- Funk und HA: Zigbee vorhanden (nur Türkontakte), MQTT und ESPHome nicht eingerichtet, aber möglich
+- Ziel: Statistik
+- Kenntnisse: Löten, 3D-Druck, Firmware-Basis offen

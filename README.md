@@ -5,6 +5,7 @@ Erkennung von Vogelschlag an Fensterscheiben mit Anbindung an Home Assistant.
 **Status:** Konzeptphase – die Anforderungen und Lösungsansätze werden gerade gemeinsam erarbeitet.
 
 - [Konzept & Lösungsraum](docs/konzept.md)
+- [Anforderungen & Festlegungen](docs/anforderungen.md)
 - [Offene Fragen](docs/offene-fragen.md)
 
 ## Geplante Struktur
