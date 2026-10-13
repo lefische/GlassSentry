@@ -1,0 +1,21 @@
+# Zugangsdaten
+firmware/*/main/secrets.h
+
+# Build-Artefakte
+.pio/
+build/
+sdkconfig
+sdkconfig.old
+sdkconfig.*.old
+firmware/*/sdkconfig.esp32*
+managed_components/
+dependencies.lock
+
+# Messdaten (bei Bedarf separat sichern)
+data/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/

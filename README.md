@@ -2,18 +2,20 @@
 
 Erkennung von Vogelschlag an Fensterscheiben mit Anbindung an Home Assistant.
 
-**Status:** Konzeptphase – die Anforderungen und Lösungsansätze werden gerade gemeinsam erarbeitet.
+**Status:** Proof of Concept – Messaufbau und Logger-Firmware stehen bereit, Messungen am Fenster folgen.
 
 - [Konzept & Lösungsraum](docs/konzept.md)
 - [Anforderungen & Festlegungen](docs/anforderungen.md)
 - [Offene Fragen](docs/offene-fragen.md)
+- [Proof of Concept: Aufbau & Messplan](docs/poc.md)
+- [Messprotokoll-Vorlage](docs/messprotokoll.md)
 
 ## Geplante Struktur
 
 ```
 docs/           Konzept, Entscheidungen, Messprotokolle
 hardware/       Schaltpläne, Stückliste, Gehäuse (3D-Druck)
-firmware/       Sensor-Firmware (ESP32)
+firmware/       Firmware (poc-logger: Rohdaten-Logger für den PoC)
 homeassistant/  MQTT-Discovery, Automationen, Dashboards
-tools/          Auswertung von Rohdaten, Test-Pendel, Klassifikator-Training
+tools/          PC-Empfänger, Auswertung, Gerätesimulation
 ```
