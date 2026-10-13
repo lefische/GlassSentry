@@ -1,6 +1,6 @@
 # Anforderungen & Rahmenbedingungen
 
-Stand: 2026-10-13 – aus fünf Abstimmungsrunden zu den [offenen Fragen](offene-fragen.md).
+Stand: 2026-10-13 – aus sechs Abstimmungsrunden zu den [offenen Fragen](offene-fragen.md).
 
 ## 1. Ausgangslage
 
@@ -184,10 +184,16 @@ eventuell den Rahmen berühren. Ein ZIP-Screen flattert kaum, weil er in den Sch
 sichtbar. Damit funktioniert **Weg A zuverlässig**: Jeder Fahrbefehl, egal ob aus HA, vom Taster
 oder vom Handsender, kommt im Laufzeit-Cover an.
 
-- **Vorher prüfen:** Homematic(IP)-Rollladenaktoren (z. B. HmIP-BROLL/-FROLL) rechnen die
-  Position oft schon selbst aus Fahrzeiten aus (Wert `LEVEL`). Wird dieser Wert über die
-  HA-Integration bereitgestellt, z. B. mit *Homematic(IP) Local*, haben wir die Position direkt.
-  Dann brauchen wir kein Laufzeit-Cover.
+- **Geprüft:** Die Screen-Entität in HA hat **kein** `current_position`. Damit ist entschieden:
+  Wir setzen ein **Laufzeit-Cover** um, z. B. die HACS-Integration *Cover Time Based*.
+  - Die Fahrzeit für Auf und Ab wird je Screen einmal mit der Stoppuhr gemessen.
+  - Befehle aus HA laufen direkt über das Laufzeit-Cover.
+  - Für manuelle Betätigungen meldet eine Automation das Homematic-Tastenereignis an das
+    Laufzeit-Cover, z. B. über den Dienst `set_known_action`.
+  - Zur Korrektur gilt: In der Endlage wird die Position nach jeder vollständigen Fahrt
+    auf 0 % bzw. 100 % gesetzt.
+  - Später möglich: Neuere Homematic-Integrationen (*Homematic(IP) Local*) geben den
+    `LEVEL` des Aktors teilweise direkt aus. Das wäre eine spätere Vereinfachung, ist aber nicht nötig.
 - **B** (Lichtsensor) bleibt als optionaler Zusatz im Proof of Concept. Er dient dann vor allem
   dazu, die Sonneneinstrahlung je Fenster zu messen, nicht mehr dazu, die Screen-Position zu bestimmen.
 - **C** (Motorlauf im Sensor) nutzen wir ohnehin automatisch.

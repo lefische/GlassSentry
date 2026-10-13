@@ -3,9 +3,7 @@
 Bereits beantwortete Punkte stehen in [anforderungen.md](anforderungen.md).
 
 ## Noch offen
-1. Stellt die Homematic-Integration in HA beim Screen-Aktor einen Positionswert bereit
-   (Attribut `current_position` bzw. `LEVEL`)? Das lässt sich unter Entwicklerwerkzeuge → Zustände prüfen.
-   Ist der Wert vorhanden, brauchen wir kein Laufzeit-Cover.
+Derzeit keine. Neue Fragen ergeben sich im Proof of Concept.
 
 ## Beantwortet
 **2026-10-13, Runde 1**
@@ -40,3 +38,6 @@ Bereits beantwortete Punkte stehen in [anforderungen.md](anforderungen.md).
 **2026-10-13, Runde 5**
 - Der Screen wird über Homematic angesteuert, auch aus HA; manuelle Betätigungen sind in HA auslesbar
 - Wetterintegration: Met.no
+
+**2026-10-13, Runde 6**
+- Die Screen-Entität hat kein `current_position` → Laufzeit-Cover
