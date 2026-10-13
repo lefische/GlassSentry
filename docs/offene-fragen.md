@@ -3,13 +3,9 @@
 Bereits beantwortete Punkte stehen in [anforderungen.md](anforderungen.md).
 
 ## Noch offen
-1. Welche Art von Sonnenblende ist es: Textil-Screen (ZIP), Raffstore mit Lamellen oder Markise?
-   Wie weit ist sie von der Scheibe entfernt? Davon hängt ab, ob die Blende an die Scheibe schlagen kann
-   und wie viel Spiegelung sie verhindert.
-2. Über welche Integration ist die Blende in HA eingebunden, und meldet sie ihre Position
-   (`cover` mit `current_position`)?
-3. Gibt es eine Wetterintegration oder Wetterstation mit Wind, Regen und Hagel als Kontext?
-4. Eigentum oder Miete? Davon hängt ab, wie geklebt werden darf.
+1. Wie wird der ZIP-Screen in HA angesteuert (Integration, z. B. Shelly, Somfy, KNX)? Gibt es außerdem Handsender oder Wandtaster?
+   Davon hängt ab, ob ein Laufzeit-Cover die Position zuverlässig errechnen kann.
+2. Welche Wetterintegration ist es (z. B. Met.no, DWD, OpenWeatherMap, eigene Station)?
 
 ## Beantwortet
 **2026-10-13, Runde 1**
@@ -34,3 +30,9 @@ Bereits beantwortete Punkte stehen in [anforderungen.md](anforderungen.md).
 - HA OS auf Raspberry Pi 5 mit SD-Karte
 - Statistik soll alle Auslösungen enthalten, Filterung später
 - Budget flexibel, Fokus auf dem Proof of Concept
+
+**2026-10-13, Runde 4**
+- Sonnenschutz ist ein ZIP-Screen, ca. 5 cm vor der Scheibe
+- Die Screen-Position ist in HA nicht bekannt
+- Eine Wetterintegration ist vorhanden
+- Eigentum

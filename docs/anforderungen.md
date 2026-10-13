@@ -1,6 +1,6 @@
 # Anforderungen & Rahmenbedingungen
 
-Stand: 2026-10-13 – aus drei Abstimmungsrunden zu den [offenen Fragen](offene-fragen.md).
+Stand: 2026-10-13 – aus vier Abstimmungsrunden zu den [offenen Fragen](offene-fragen.md).
 
 ## 1. Ausgangslage
 
@@ -12,8 +12,9 @@ Stand: 2026-10-13 – aus drei Abstimmungsrunden zu den [offenen Fragen](offene-
 - **Verglasung:** durchgehend 3-fach-Isolierglas.
 - **Ausrichtung:** Süden.
 - **Betroffen sind bisher:** die festen Fenster und die Schiebetür.
-- **Sonnenschutz:** Vor den Fenstern liegt eine elektrische Sonnenblende, die über
-  Home Assistant steuerbar ist.
+- **Sonnenschutz:** elektrischer **ZIP-Screen**, ca. 5 cm vor der Scheibe, über
+  Home Assistant steuerbar. Die **Position** meldet er in HA **nicht**.
+- **Eigentum:** Kleben und notfalls Schrauben am Rahmen sind möglich.
 - **Häufigkeit:** unbekannt, das soll ja gemessen werden. Vermutung: vor allem
   **im Sommer und am Nachmittag**.
 
@@ -30,6 +31,7 @@ Stand: 2026-10-13 – aus drei Abstimmungsrunden zu den [offenen Fragen](offene-
 - Ein Zigbee-Netz läuft schon, mit Türkontakten. An den Fenstern gibt es noch keine Kontakte.
 - MQTT ist noch nicht eingerichtet, kann aber eingeführt werden.
 - ESPHome wird noch nicht genutzt, kann aber eingeführt werden.
+- Eine Wetterintegration ist vorhanden.
 
 ### Zielsetzung
 - **Hauptziel ist die Statistik:** Es soll erfasst werden, wie oft, wo und wann Vögel gegen die Fenster fliegen.
@@ -147,29 +149,53 @@ senden und am Netzteil hängen.
 - **Thermische Spannungen:** Sonne und Wolkenwechsel können ein Knacken in Glas und Rahmen
   auslösen. Diese Fälle müssen in die Störtests, z. B. an einem sonnigen Tag mit wechselnder Bewölkung.
 
-### 2.6a Elektrische Sonnenblende
-Die über HA steuerbare Sonnenblende ist für das Projekt **sehr wertvoll**, und zwar in drei Rollen:
+### 2.6a ZIP-Screen als Sonnenschutz
+Ein ZIP-Screen ist ein Textilbehang, der seitlich in Schienen geführt wird. Er sitzt
+ca. 5 cm vor der Scheibe und ist für das Projekt **sehr wertvoll**, und zwar in vier Rollen:
 
-1. **Einflussgröße:** Ist die Blende unten, gibt es keine Spiegelung, und die Scheibe ist
-   für Vögel kaum erreichbar. Die Position der Blende wird deshalb zu jedem Ereignis gespeichert.
+1. **Einflussgröße:** Ist der Screen unten, spiegelt die Scheibe nicht mehr, und Vögel
+   kommen nicht an das Glas heran. Die Position wird deshalb zu jedem Ereignis gespeichert.
 2. **Richtige Bezugsgröße für die Statistik:** Statt „Treffer pro Monat“ zählt
    „Treffer pro Stunde **offener** Scheibe“. Dafür erfasst HA die Stunden mit
-   hochgefahrener Blende pro Fenster, z. B. über `history_stats`.
-3. **Experiment:** Später lässt sich gezielt testen, ob ein Herunterfahren an
+   hochgefahrenem Screen pro Fenster, z. B. über `history_stats`.
+3. **Gratis-Referenz für Fehlalarme:** Jede Auslösung bei geschlossenem Screen kann
+   **kein Vogel am Glas** sein. Diese Ereignisse sind automatisch als „kein Vogel“ markiert.
+   Damit lernen wir die Störquellen kennen, ohne dass jemand von Hand bestätigen muss.
+4. **Experiment:** Später lässt sich gezielt testen, ob ein Herunterfahren an
    kritischen Nachmittagen Treffer verhindert (Ziel Z6). HA kann das sogar automatisch.
 
-**Störquelle:** Auch die Blende selbst kann Fehlalarme auslösen, nämlich durch Motorlauf,
-Anschlag in der Endlage und Flattern bei Wind. Abhilfe:
-- Während der Fahrt und kurz danach (z. B. 10 s) werden Ereignisse als „Blende aktiv“ markiert.
-- Wind kommt als Kontext dazu.
-- Beides muss in die Störtests.
+**Störquelle:** Der Screen selbst kann Fehlalarme auslösen, nämlich durch Motorlauf
+und Anschlag in der Endlage. Bei starkem Wind kann sich das Tuch bewegen und
+eventuell den Rahmen berühren. Ein ZIP-Screen flattert kaum, weil er in den Schienen geführt ist.
+- Bei 5 cm Abstand und großen Scheiben ist eine Berührung des Glases unwahrscheinlich, aber
+  nicht ausgeschlossen. Das muss in den Störtests bei Wind geprüft werden.
+- Während der Fahrt und kurz danach (z. B. 10 s) werden Ereignisse als „Screen aktiv“ markiert.
+
+**Position ist in HA nicht bekannt.** Dafür gibt es drei Lösungswege, die sich kombinieren lassen:
+
+| Weg | Prinzip | Bewertung |
+|-----|---------|-----------|
+| **A – Laufzeit-Cover** | HA rechnet die Position aus dem letzten Befehl und der Fahrzeit (z. B. die HACS-Integration *Cover Time Based*) | gut, solange **nur über HA** gefahren wird; Handsender oder Taster bringen es aus dem Takt |
+| **B – Helligkeitssensor im Sensorknoten** | kleiner Lichtsensor (z. B. VEML7700, ca. 2×2 mm), der durch die Scheibe misst: Screen unten → Helligkeit bricht stark ein | unabhängig von der Bedienart, liefert **zusätzlich die Sonneneinstrahlung je Fenster**. Das ist eine gute Größe für die Spiegelung. Kostet etwas Strom und Platz |
+| **C – Motorlauf erkennen** | Der Vibrationssensor spürt den Screen-Motor im Rahmen | nur für Fahrbeginn und Fahrende, nicht für die Position; trotzdem nützlich zum Markieren |
+
+**Vorschlag:** **A** sofort in HA umsetzen. **B** im Proof of Concept mit erproben.
+**C** nutzen wir ohnehin automatisch.
+
+### 2.6c Wetter
+- Die vorhandene Wetterintegration liefert zu jedem Ereignis den Kontext: Wind, Niederschlag
+  und Bewölkung.
+- Hagel ist in den meisten Integrationen nur indirekt erkennbar, über Wetterzustand oder
+  Warnungen (z. B. DWD-Integration). Für die Statistik reicht das, weil wir ohnehin nur markieren
+  und nichts verwerfen.
 
 ### 2.6b Holz-Alu-Rahmen
 - **Innen Holz:** Holz dämpft Schwingungen. Ein Sensor am Rahmen bekommt deshalb
   voraussichtlich weniger Signal als einer direkt auf dem Glas. Das muss im
   Proof of Concept gemessen werden.
-- **Montage:** Auf Holz lässt sich gut kleben (lösbare Klebepads). Kleine Schrauben gehen
-  notfalls auch, wenn das am eigenen Fenster in Ordnung ist.
+- **Montage:** Das Haus ist Eigentum. Kleben ist also unproblematisch, und kleine Schrauben am
+  Holzrahmen sind möglich. Auf dem Glas soll trotzdem lösbar geklebt werden, damit sich der
+  Sensor umsetzen lässt.
 - **Optik:** Das Gehäuse wird im Holzton gedruckt (Holz-Filament oder lackiertes PETG/ASA)
   oder sitzt in der Laibung.
 
