@@ -3,23 +3,13 @@
 Bereits beantwortete Punkte stehen in [anforderungen.md](anforderungen.md).
 
 ## Noch offen
-
-### A. Fenster
-1. Ich gehe davon aus, dass die 4 übrigen EG-Elemente neben Schiebe- und Terrassentür Festverglasungen sind. Stimmt das?
-2. Welche Fensterart haben die 6 OG-Fenster (Dreh-Kipp, fest)? Wurden dort auch schon Treffer bemerkt?
-3. Wie oft kommt es ungefähr zu Vogelschlag (pro Monat oder Jahr), und zu welcher Jahres- und Tageszeit?
-4. Welche Rahmen gibt es (Kunststoff, Holz, Alu) und in welcher Farbe? Danach richten sich Gehäusefarbe und Montage.
-5. Gibt es außen Rollläden oder Raffstores? Die beeinflussen die Spiegelung und damit die Statistik.
-6. Eigentum oder Miete? Davon hängt ab, wie geklebt werden darf.
-
-### B. Home Assistant
-7. Läuft auf dem Raspberry Pi **HA OS** (mit Add-ons) oder Docker/Container?
-8. Welches Pi-Modell, und läuft es von SD-Karte oder SSD?
-9. Gibt es eine Wetterintegration oder Wetterstation, damit sich Hagel und Regen herausfiltern lassen?
-
-### C. Rahmenbedingungen
-10. Budget pro Fenster bzw. insgesamt?
-11. Welche Fehlerrate ist für die Statistik akzeptabel? Lieber Ereignisse verpassen oder lieber einige Fehlalarme mitzählen?
+1. Welche Art von Sonnenblende ist es: Textil-Screen (ZIP), Raffstore mit Lamellen oder Markise?
+   Wie weit ist sie von der Scheibe entfernt? Davon hängt ab, ob die Blende an die Scheibe schlagen kann
+   und wie viel Spiegelung sie verhindert.
+2. Über welche Integration ist die Blende in HA eingebunden, und meldet sie ihre Position
+   (`cover` mit `current_position`)?
+3. Gibt es eine Wetterintegration oder Wetterstation mit Wind, Regen und Hagel als Kontext?
+4. Eigentum oder Miete? Davon hängt ab, wie geklebt werden darf.
 
 ## Beantwortet
 **2026-10-13, Runde 1**
@@ -36,3 +26,11 @@ Bereits beantwortete Punkte stehen in [anforderungen.md](anforderungen.md).
 - Keine Haustiere, Kinder oder Roboter
 - Home Assistant läuft auf einem Raspberry Pi
 - Sensor soll im finalen Aufbau sehr unauffällig sein
+
+**2026-10-13, Runde 3**
+- EG: 4 fest; OG: überwiegend fest, 3 Kippfenster
+- Häufigkeit unbekannt (soll gemessen werden), vermutlich Sommer und Nachmittag
+- Rahmen innen Holz, außen Alu; elektrische Sonnenblende, über HA steuerbar
+- HA OS auf Raspberry Pi 5 mit SD-Karte
+- Statistik soll alle Auslösungen enthalten, Filterung später
+- Budget flexibel, Fokus auf dem Proof of Concept

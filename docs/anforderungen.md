@@ -1,17 +1,21 @@
 # Anforderungen & Rahmenbedingungen
 
-Stand: 2026-10-13 – aus der ersten und zweiten Abstimmung zu den [offenen Fragen](offene-fragen.md).
+Stand: 2026-10-13 – aus drei Abstimmungsrunden zu den [offenen Fragen](offene-fragen.md).
 
 ## 1. Ausgangslage
 
 ### Fenster
-- **Erdgeschoss:** 6 bodentiefe Elemente. Darunter sind eine Schiebetür und eine
-  Terrassentür, die übrigen sind *vermutlich* Festverglasungen (noch zu bestätigen).
-- **Obergeschoss:** 6 Fenster mit ca. 1,5 m Höhe.
-- **Gesamt:** 12 Fenster bzw. Elemente.
+- **Erdgeschoss:** 6 bodentiefe Elemente: 4 Festverglasungen, 1 Schiebetür, 1 Terrassentür.
+- **Obergeschoss:** 6 Fenster mit ca. 1,5 m Höhe: 3 Festverglasungen, 3 Kippfenster.
+- **Gesamt:** 12 Elemente, davon 7 fest, 3 kippbar, 1 Schiebetür, 1 Terrassentür.
+- **Rahmen:** Holz-Alu (innen Holz, außen Alu).
 - **Verglasung:** durchgehend 3-fach-Isolierglas.
 - **Ausrichtung:** Süden.
 - **Betroffen sind bisher:** die festen Fenster und die Schiebetür.
+- **Sonnenschutz:** Vor den Fenstern liegt eine elektrische Sonnenblende, die über
+  Home Assistant steuerbar ist.
+- **Häufigkeit:** unbekannt, das soll ja gemessen werden. Vermutung: vor allem
+  **im Sommer und am Nachmittag**.
 
 ### Umgebung
 - Keine Haustiere, keine Kinder, keine Saug- oder Mähroboter.
@@ -22,7 +26,7 @@ Stand: 2026-10-13 – aus der ersten und zweiten Abstimmung zu den [offenen Frag
 - **Proof of Concept:** darf mit Netzteil betrieben werden.
 
 ### Vorhandene Infrastruktur
-- Home Assistant läuft auf einem Raspberry Pi.
+- Home Assistant OS läuft auf einem **Raspberry Pi 5** mit **SD-Karte**.
 - Ein Zigbee-Netz läuft schon, mit Türkontakten. An den Fenstern gibt es noch keine Kontakte.
 - MQTT ist noch nicht eingerichtet, kann aber eingeführt werden.
 - ESPHome wird noch nicht genutzt, kann aber eingeführt werden.
@@ -30,6 +34,11 @@ Stand: 2026-10-13 – aus der ersten und zweiten Abstimmung zu den [offenen Frag
 ### Zielsetzung
 - **Hauptziel ist die Statistik:** Es soll erfasst werden, wie oft, wo und wann Vögel gegen die Fenster fliegen.
 - Eine Sofort-Benachrichtigung ist nicht erforderlich.
+- **Lieber alles erfassen:** Die Statistik soll alle Auslösungen enthalten. Fehlalarme
+  werden bei Bedarf später herausgefiltert.
+
+### Budget
+- Flexibel, zunächst geht es nur um den Proof of Concept.
 
 ### Optik
 - Im finalen Aufbau muss der Sensor **sehr unauffällig** sein.
@@ -100,8 +109,11 @@ senden und am Netzteil hängen.
   standardmäßig nach 10 Tagen. Wir brauchen deshalb zwei Dinge:
   - Zähler pro Fenster mit `state_class: total_increasing`. Die landen in den
     Long-Term-Statistics und bleiben dauerhaft erhalten.
-  - Ein vollständiges Ereignisprotokoll mit Merkmalen, z. B. in InfluxDB oder als
-    CSV/SQLite-Export. Die Entscheidung dazu ist noch offen.
+  - Ein vollständiges Ereignisprotokoll mit Merkmalen (Umsetzung siehe 2.8).
+- **Empfindlich auslösen, später filtern:** Der Schwellwert wird bewusst niedrig gesetzt.
+  Jede Auslösung landet im Protokoll. Die Klassifikation („Vogel“, „Bedienung“,
+  „Wetter“ usw.) ist nur ein Attribut und wird nie zum Verwerfen genutzt.
+  Pro Fenster gibt es deshalb zwei Zähler: **alle Auslösungen** und **wahrscheinlich Vogel**.
 - **Wir brauchen echte Bestätigungen (Ground Truth):** Ein „Bestätigen / Fehlalarm“-Button in HA
   macht das möglich, z. B. nach einem Blick auf Federstaub-Abdrücke. Erst damit lässt sich
   die Erkennungsgüte messen.
@@ -124,15 +136,42 @@ senden und am Netzteil hängen.
   ist so allerdings nicht erkennbar.
 
 ### 2.6 Südausrichtung
-- **Spiegelung:** Ausgerechnet zur Mittagszeit spiegeln die Scheiben Himmel und Garten
-  am stärksten. Für die Statistik nehmen wir deshalb Sonnenstand
-  (`sun.sun`: Azimut, Elevation) und Bewölkung zu jedem Ereignis mit auf.
+- **Spiegelung:** Am Nachmittag steht die Sonne im Südwesten. Dann spiegeln die Scheiben
+  Himmel und Garten oft besonders stark. Das passt zur Vermutung „Sommer, Nachmittag“.
+  Für die Statistik nehmen wir deshalb Sonnenstand (`sun.sun`: Azimut, Elevation)
+  und Bewölkung zu jedem Ereignis mit auf. So lässt sich die Vermutung **prüfen**.
 - **Hitze:** Ein Gehäuse direkt an der besonnten Scheibe kann 50–70 °C erreichen.
   - **Kein PLA** verwenden, sondern **PETG oder ASA**.
   - Die Batterie muss für die Temperatur ausgelegt sein, z. B. Lithium-Primärzellen
     (Li-SOCl₂ oder Li-MnO₂) bis über 60 °C. LiPo-Akkus hinter Glas in der Sonne sind ungeeignet.
 - **Thermische Spannungen:** Sonne und Wolkenwechsel können ein Knacken in Glas und Rahmen
   auslösen. Diese Fälle müssen in die Störtests, z. B. an einem sonnigen Tag mit wechselnder Bewölkung.
+
+### 2.6a Elektrische Sonnenblende
+Die über HA steuerbare Sonnenblende ist für das Projekt **sehr wertvoll**, und zwar in drei Rollen:
+
+1. **Einflussgröße:** Ist die Blende unten, gibt es keine Spiegelung, und die Scheibe ist
+   für Vögel kaum erreichbar. Die Position der Blende wird deshalb zu jedem Ereignis gespeichert.
+2. **Richtige Bezugsgröße für die Statistik:** Statt „Treffer pro Monat“ zählt
+   „Treffer pro Stunde **offener** Scheibe“. Dafür erfasst HA die Stunden mit
+   hochgefahrener Blende pro Fenster, z. B. über `history_stats`.
+3. **Experiment:** Später lässt sich gezielt testen, ob ein Herunterfahren an
+   kritischen Nachmittagen Treffer verhindert (Ziel Z6). HA kann das sogar automatisch.
+
+**Störquelle:** Auch die Blende selbst kann Fehlalarme auslösen, nämlich durch Motorlauf,
+Anschlag in der Endlage und Flattern bei Wind. Abhilfe:
+- Während der Fahrt und kurz danach (z. B. 10 s) werden Ereignisse als „Blende aktiv“ markiert.
+- Wind kommt als Kontext dazu.
+- Beides muss in die Störtests.
+
+### 2.6b Holz-Alu-Rahmen
+- **Innen Holz:** Holz dämpft Schwingungen. Ein Sensor am Rahmen bekommt deshalb
+  voraussichtlich weniger Signal als einer direkt auf dem Glas. Das muss im
+  Proof of Concept gemessen werden.
+- **Montage:** Auf Holz lässt sich gut kleben (lösbare Klebepads). Kleine Schrauben gehen
+  notfalls auch, wenn das am eigenen Fenster in Ordnung ist.
+- **Optik:** Das Gehäuse wird im Holzton gedruckt (Holz-Filament oder lackiertes PETG/ASA)
+  oder sitzt in der Laibung.
 
 ### 2.7 Unauffälligkeit im finalen Aufbau
 Daraus folgt ein **zweiteiliger Aufbau**:
@@ -152,13 +191,24 @@ Daraus folgt ein **zweiteiliger Aufbau**:
 - **Beste Option:** Reicht das Signal **am Rahmen bzw. an der Glasleiste** aus, verschwindet
   der Sensor ganz von der Scheibe. Diese Messung ist im Proof of Concept deshalb ein Pflichtpunkt.
 
-### 2.8 Home Assistant auf dem Raspberry Pi
-- Läuft HA OS, wird der MQTT-Broker als **Mosquitto-Add-on** installiert.
-- Die Datenmenge ist klein: wenige Ereignisse pro Woche zu je ~1 KB Merkmalen.
-  Für die Statistik reichen Long-Term-Statistics sowie ein schlankes Ereignisprotokoll.
-- Bei einer **SD-Karte** wären InfluxDB und häufiges Schreiben ungünstig, weil die Karte
-  dabei verschleißt. Rohdaten (Wellenformen) speichern wir daher nur im Proof of Concept
-  und dann auf einem anderen Rechner, nicht auf dem Pi.
+### 2.8 Home Assistant OS auf dem Raspberry Pi 5 (SD-Karte)
+- **MQTT:** Der Broker kommt als **Mosquitto-Add-on** dazu, so wie es bei HA OS üblich ist.
+- **Datenmenge:** Sie ist klein: einige Ereignisse pro Woche zu je ~1 KB Merkmalen.
+  Selbst bei Unwetter mit vielen Auslösungen bleibt sie überschaubar. Das Gateway
+  begrenzt die Rate und fasst Ereignisse zusammen.
+- **Ereignisprotokoll (Vorschlag):**
+  - Das Gateway schickt jedes Ereignis als JSON per MQTT.
+  - HA hängt es als **JSON-Zeile** an eine Datei unter `/share/glasssentry/` an,
+    z. B. über die File-Integration oder ein kleines Add-on.
+  - Diese Datei sichert das normale HA-Backup mit. Sie lässt sich später in Python
+    oder Excel auswerten.
+  - InfluxDB/Grafana kann später dazukommen, wenn die Speicherfrage geklärt ist.
+- **SD-Karte:** Sie verschleißt durch häufiges Schreiben. Unsere Daten fallen dabei kaum
+  ins Gewicht. Der HA-Recorder selbst ist der größere Verursacher. **Empfehlung unabhängig
+  vom Projekt:** Beim Pi 5 auf eine **NVMe-SSD** (M.2-HAT) umsteigen. Für InfluxDB wäre das
+  Voraussetzung.
+- **Rohdaten:** Wellenformen speichern wir nur im Proof of Concept und dann auf einem anderen
+  Rechner, nicht auf dem Pi.
 
 ---
 
@@ -182,5 +232,5 @@ Daraus folgt ein **zweiteiliger Aufbau**:
 |-------|---------|------------|
 | Proof of Concept | **1 Festverglasung EG** (die am häufigsten getroffene) | ruhig, betroffen, Netzteil möglich |
 | Ausbau 1 | übrige Festverglasungen EG + **Schiebetür** | alle bekannten Trefferstellen |
-| Ausbau 2 | 6 Fenster OG | Statistik vervollständigen |
+| Ausbau 2 | 6 Fenster OG (3 fest, 3 kippbar) | Statistik vervollständigen; Kippstellung über die Lage zur Schwerkraft erkennen |
 | Ausbau 3 | Terrassentür | bisher nicht betroffen |
