@@ -1,13 +1,20 @@
 # Anforderungen & Rahmenbedingungen
 
-Stand: 2026-10-13 – aus der ersten Abstimmung zu den [offenen Fragen](offene-fragen.md).
+Stand: 2026-10-13 – aus der ersten und zweiten Abstimmung zu den [offenen Fragen](offene-fragen.md).
 
 ## 1. Ausgangslage
 
 ### Fenster
-- **Erdgeschoss:** 6 bodentiefe Fenster.
-- **Obergeschoss:** Fenster mit ca. 1,5 m Höhe (Anzahl noch offen).
+- **Erdgeschoss:** 6 bodentiefe Elemente. Darunter sind eine Schiebetür und eine
+  Terrassentür, die übrigen sind *vermutlich* Festverglasungen (noch zu bestätigen).
+- **Obergeschoss:** 6 Fenster mit ca. 1,5 m Höhe.
+- **Gesamt:** 12 Fenster bzw. Elemente.
 - **Verglasung:** durchgehend 3-fach-Isolierglas.
+- **Ausrichtung:** Süden.
+- **Betroffen sind bisher:** die festen Fenster und die Schiebetür.
+
+### Umgebung
+- Keine Haustiere, keine Kinder, keine Saug- oder Mähroboter.
 
 ### Energieversorgung
 - **Sensoren:** müssen mit Batterie laufen, weil an den Fenstern keine Steckdosen sind.
@@ -15,7 +22,7 @@ Stand: 2026-10-13 – aus der ersten Abstimmung zu den [offenen Fragen](offene-f
 - **Proof of Concept:** darf mit Netzteil betrieben werden.
 
 ### Vorhandene Infrastruktur
-- Home Assistant läuft schon.
+- Home Assistant läuft auf einem Raspberry Pi.
 - Ein Zigbee-Netz läuft schon, mit Türkontakten. An den Fenstern gibt es noch keine Kontakte.
 - MQTT ist noch nicht eingerichtet, kann aber eingeführt werden.
 - ESPHome wird noch nicht genutzt, kann aber eingeführt werden.
@@ -23,6 +30,9 @@ Stand: 2026-10-13 – aus der ersten Abstimmung zu den [offenen Fragen](offene-f
 ### Zielsetzung
 - **Hauptziel ist die Statistik:** Es soll erfasst werden, wie oft, wo und wann Vögel gegen die Fenster fliegen.
 - Eine Sofort-Benachrichtigung ist nicht erforderlich.
+
+### Optik
+- Im finalen Aufbau muss der Sensor **sehr unauffällig** sein.
 
 ### Kenntnisse & Werkzeug
 - Löten und 3D-Druck sind vorhanden, Gehäuse und Platinen können selbst gebaut werden.
@@ -44,19 +54,19 @@ ob das Signal innen noch sicher messbar ist. Dazu vergleichen wir:
 Falls innen nicht genug ankommt, gibt es zwei Ausweichlösungen: einen Sensor außen auf der Scheibe
 (wetterfest) oder am Flügelrahmen.
 
-### 2.2 Bodentiefe Fenster bringen zusätzliche Störquellen
-Große, tief reichende Scheiben spiegeln stärker und werden daher häufiger getroffen.
-In Bodenhöhe kommen aber neue Fehlauslöser hinzu:
+### 2.2 Fenstertypen: fest, schiebend, drehend
+Ohne Haustiere, Kinder und Roboter bleiben als Störquellen vor allem drei Dinge:
+Bedienung der Türen, Fensterputzen und Wetter.
 
-- Haustiere, Kinder, Staubsauger- und Mähroboter,
-- Gartenmöbel und Gartengeräte,
-- Fensterputzen.
-
-Dafür braucht es einen Putzmodus bzw. einen Schalter zum Scharfstellen in Home Assistant.
-Außerdem müssen diese Fälle in den Störtests vorkommen.
+| Typ | Besonderheit | Umgang |
+|-----|--------------|--------|
+| **Festverglasung** | bewegt sich nie, ruhigster Messort | **idealer Startpunkt** für den Proof of Concept; Elektronik kann fest in der Laibung oder am Rahmen sitzen |
+| **Schiebetür** | Öffnen und Schließen erzeugt Rollgeräusche und einen Anschlag | Sensor erkennt die Bewegung selbst (seitliche Beschleunigung, lange Signaldauer) und unterdrückt sie; Kabel zum Flügel nicht möglich → Sensor und Elektronik sitzen komplett am Flügel |
+| **Terrassentür (Dreh/Kipp)** | Schließen und Zuschlagen | Kippstellung über die Lage zur Schwerkraft erkennbar; Zuschlagen über Gleichtakt mit den Nachbarscheiben und lange Signaldauer unterdrücken. Bisher nicht betroffen → **niedrige Priorität** |
 
 Große Scheiben schwingen tiefer und schwächer. Die Schwellwerte müssen deshalb für EG und OG
-getrennt kalibriert werden.
+getrennt kalibriert werden. Für das Fensterputzen gibt es einen Putzmodus
+bzw. einen Scharf-Schalter in Home Assistant.
 
 ### 2.3 Batteriesensoren mit Gateway am Netz
 Die Topologie ist damit gesetzt:
@@ -113,6 +123,43 @@ senden und am Netzteil hängen.
   ausblenden, ganz ohne zusätzliche Fensterkontakte. Ein Drehflügel, der geöffnet wird,
   ist so allerdings nicht erkennbar.
 
+### 2.6 Südausrichtung
+- **Spiegelung:** Ausgerechnet zur Mittagszeit spiegeln die Scheiben Himmel und Garten
+  am stärksten. Für die Statistik nehmen wir deshalb Sonnenstand
+  (`sun.sun`: Azimut, Elevation) und Bewölkung zu jedem Ereignis mit auf.
+- **Hitze:** Ein Gehäuse direkt an der besonnten Scheibe kann 50–70 °C erreichen.
+  - **Kein PLA** verwenden, sondern **PETG oder ASA**.
+  - Die Batterie muss für die Temperatur ausgelegt sein, z. B. Lithium-Primärzellen
+    (Li-SOCl₂ oder Li-MnO₂) bis über 60 °C. LiPo-Akkus hinter Glas in der Sonne sind ungeeignet.
+- **Thermische Spannungen:** Sonne und Wolkenwechsel können ein Knacken in Glas und Rahmen
+  auslösen. Diese Fälle müssen in die Störtests, z. B. an einem sonnigen Tag mit wechselnder Bewölkung.
+
+### 2.7 Unauffälligkeit im finalen Aufbau
+Daraus folgt ein **zweiteiliger Aufbau**:
+
+```
+  Scheibe (innen, Ecke)                 Rahmen / Laibung / Glasleiste
+ ┌──────────────────────┐   dünnes     ┌────────────────────────────┐
+ │ Sensorkopf           │   Flachkabel │ Elektronik + Batterie      │
+ │ Piezo Ø 10–15 mm oder├──────────────┤ ESP32, Funk, Batterie      │
+ │ MEMS-Sensor 2×2 mm   │   (~1 mm)    │ farblich an Rahmen angepasst│
+ └──────────────────────┘              └────────────────────────────┘
+```
+
+- **Sensorkopf:** möglichst klein, in der Scheibenecke direkt an der Glasleiste,
+  in Rahmenfarbe abgedeckt (3D-Druck).
+- **Elektronikbox:** flach am Rahmen, an der Glasleiste oder in der Laibung, wo sie weniger auffällt.
+- **Beste Option:** Reicht das Signal **am Rahmen bzw. an der Glasleiste** aus, verschwindet
+  der Sensor ganz von der Scheibe. Diese Messung ist im Proof of Concept deshalb ein Pflichtpunkt.
+
+### 2.8 Home Assistant auf dem Raspberry Pi
+- Läuft HA OS, wird der MQTT-Broker als **Mosquitto-Add-on** installiert.
+- Die Datenmenge ist klein: wenige Ereignisse pro Woche zu je ~1 KB Merkmalen.
+  Für die Statistik reichen Long-Term-Statistics sowie ein schlankes Ereignisprotokoll.
+- Bei einer **SD-Karte** wären InfluxDB und häufiges Schreiben ungünstig, weil die Karte
+  dabei verschleißt. Rohdaten (Wellenformen) speichern wir daher nur im Proof of Concept
+  und dann auf einem anderen Rechner, nicht auf dem Pi.
+
 ---
 
 ## 3. Angepasste Ziel-Prioritäten
@@ -126,3 +173,14 @@ senden und am Netzteil hängen.
 | Z6 | Wirksamkeit von Schutzmaßnahmen bewerten | **Soll** |
 | Z3 | Sofort-Benachrichtigung | **Kann** |
 | Z7 | Kamerabeleg / Artbestimmung | Kann |
+
+---
+
+## 4. Ausbau-Reihenfolge (Vorschlag)
+
+| Stufe | Fenster | Begründung |
+|-------|---------|------------|
+| Proof of Concept | **1 Festverglasung EG** (die am häufigsten getroffene) | ruhig, betroffen, Netzteil möglich |
+| Ausbau 1 | übrige Festverglasungen EG + **Schiebetür** | alle bekannten Trefferstellen |
+| Ausbau 2 | 6 Fenster OG | Statistik vervollständigen |
+| Ausbau 3 | Terrassentür | bisher nicht betroffen |
