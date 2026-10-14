@@ -167,7 +167,7 @@ bool lis3dh_start(void)
     ESP_ERROR_CHECK(spi_bus_initialize(SPI2_HOST, &bus, SPI_DMA_DISABLED));
 
     spi_device_interface_config_t dev = {
-        .clock_speed_hz = 8 * 1000 * 1000,
+        .clock_speed_hz = GS_LIS_SPI_HZ,
         .mode = 3,
         .spics_io_num = GS_LIS_PIN_CS,
         .queue_size = 1,

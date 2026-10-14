@@ -83,6 +83,8 @@ Artikelnummer, die man in die Suche oder die Schnellbestellung eingibt.
 | 2 | **JUMPER 2,54 BL** | Kurzschlussbrücke, blau | Verstärkung 11/101 umschalten | ✔ |
 | 1 | Shop-Nr. **8269** (Suche „Lochraster 75x100“) | Rademacher Lochrasterplatine Hartpapier 75 × 100 mm, RM 2,54 | Verstärker-Platine | ✔ |
 | 1 | **ML 214-10** | BKL Mikrofon-Flachkabel (Diodenleitung) 2 × 0,14 mm², geschirmt, 10-m-Ring | Piezo-Zuleitungen. Die beiden Adern lassen sich trennen, so bekommt jeder Piezo eine geschirmte Ader. Ersetzt das nicht mehr lieferbare ML 238-5 | ✔ ca. 9,99 € |
+| 1 | **AWG 28-10G 3M** | BKL Flachbandkabel AWG 28, 10-polig, grau, 3-m-Ring | LIS3DH-Anschluss (SPI) vom Glas zur Platine, ca. 1 m. Belegung mit Masseadern zwischen den Signalen, siehe 4.2 | ✔ ca. 3,59 € |
+| 1 | Shop-Nr. **282697** (Suche „Jumper Kabel 40 pol f/m“) | Jumper-Kabel 40 Stück, Buchse/Stecker, 20 cm | Probeaufbau auf dem Tisch, bevor gelötet wird (optional) | ✔ |
 
 **Für die Reichelt-Schnellbestellung** (Artikelnummer und Menge, inkl. Reserve):
 
@@ -104,10 +106,12 @@ SL 1X40G 2,54      1
 BL 1X20G8 2,54     3
 JUMPER 2,54 BL     4
 ML 214-10          1
+AWG 28-10G 3M      1
 ```
 
-Das LIS3DH-Board (Shop-Nr. 235486) und die Lochrasterplatine (Shop-Nr. 8269) bitte
-über die Shop-Suche in den Warenkorb legen, ihre Artikelnummer ist nicht bekannt.
+Das LIS3DH-Board (Shop-Nr. 235486), die Lochrasterplatine (Shop-Nr. 8269) und optional
+die Jumper-Kabel (Shop-Nr. 282697) bitte über die Shop-Suche in den Warenkorb legen,
+ihre Artikelnummer ist nicht bekannt.
 
 Widerstände und Kondensatoren kosten nur Cent-Beträge. Es lohnt sich, jeweils
 einige Stück mehr zu bestellen.
@@ -117,7 +121,6 @@ einige Stück mehr zu bestellen.
 | Anz. | Teil | Zweck |
 |------|------|-------|
 | 1 | USB-Netzteil 5 V / 1 A + USB-C-Kabel (2 m) | Stromversorgung |
-| ca. 1 m | Litzen oder Jumper-Kabel, 6 Adern | LIS3DH-Anschluss (SPI) |
 
 **Gesamtkosten Elektronik:** ca. 35–45 € inkl. Reserveteilen, plus Versand.
 
@@ -217,6 +220,18 @@ auf 11 umstecken.
 | GND | GND | Schirm der Piezo-Kabel nur **auf der Platinenseite** an Vref |
 
 Pins lassen sich in `firmware/poc-logger/main/config.h` ändern.
+
+**LIS3DH-Kabel (Flachbandkabel, 10 Adern, ca. 1 m):** Steck-Jumper sind für die Montage am
+Glas ungeeignet. Ihre Kontakte können bei Erschütterung kurz unterbrechen, und 20–40 cm
+reichen nicht bis zur Platine. Das Flachbandkabel wird an beiden Enden direkt angelötet.
+Zwischen den Signalen liegt jeweils eine Masseader, das verringert das Übersprechen:
+
+| Ader | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
+|------|---|---|---|---|---|---|---|---|---|----|
+| Signal | GND | SCL (GPIO12) | GND | SDA (GPIO11) | GND | SDO (GPIO13) | GND | CS (GPIO10) | 3V3 | GND |
+
+Die Firmware taktet den SPI-Bus wegen der Kabellänge mit **1 MHz** (`GS_LIS_SPI_HZ`). Das reicht
+auch für den 5,4-kHz-Modus und ist auf 1 m Flachbandkabel unkritisch.
 
 ---
 

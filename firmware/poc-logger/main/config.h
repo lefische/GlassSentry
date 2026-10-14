@@ -27,6 +27,7 @@
 #define GS_LIS_PIN_MISO       13              // SDO am Breakout
 #define GS_LIS_PIN_CS         10
 #define GS_LIS_FAST_MODE      0               // 0 = 1344 Hz / 12 bit, 1 = 5376 Hz / 8 bit
+#define GS_LIS_SPI_HZ         1000000         // 1 MHz: robust bei ~1 m Kabel, reicht auch für 5376 Hz
 
 // ---------------------------------------------------------------------------
 // Erfassungsfenster je Ereignis
