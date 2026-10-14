@@ -50,8 +50,7 @@ Aus den Antworten folgen die Entscheidungen für den nächsten Schritt (Kapitel 
 
 ## 3. Stückliste
 
-Die Elektronik ist komplett bei **Reichelt Elektronik** bestellbar. Die einzige
-Ausnahme ist die optionale 12-mm-Piezoscheibe. Die Spalte „Reichelt-Nr.“ enthält die
+Die Elektronik ist komplett bei **Reichelt Elektronik** bestellbar. Die Spalte „Reichelt-Nr.“ enthält die
 Artikelnummer, die man in die Suche oder die Schnellbestellung eingibt.
 
 > **Hinweis:** Die Artikelnummern wurden am 2026-10-14 per Websuche ermittelt.
@@ -70,6 +69,7 @@ Artikelnummer, die man in die Suche oder die Schnellbestellung eingibt.
 | 1 (+1) | **MCP 6004-I/P** | Microchip MCP6004, 4-fach-OpAmp, Rail-to-Rail, 1 MHz, DIP-14 | Piezo-Verstärker | ✔ |
 | 1 (+1) | **GS 14P** | IC-Sockel 14-polig, Präzision | Sockel für den OpAmp | ✔ ca. 0,25 € |
 | 4 | **EPZ-20MS64W** | EKULIT Piezo-Element Ø 20 mm, Messing, 35 nF, mit Litzen | Sensor (2 im Einsatz, 2 Reserve) | ✔ ca. 0,45 € |
+| 2 | **EPZ-15MS60W** | EKULIT Piezo-Element Ø 15 mm, Messing, mit Litzen | Versuch M5 „kleine Bauform“ (ersetzt die abgekündigte Murata 7BB-12-9) | ✔ ca. 0,38 € |
 | 4 | **BAT85S-TAP** | Vishay Schottky-Diode 30 V, 0,2 A, DO-35 | Überspannungsschutz am Eingang | ✔ |
 | 4 | **METALL 10,0K** | Metallschichtwiderstand 10 kΩ, 1 %, 0207 | 2× Eingangsschutz, 2× Rg (Verstärkung 11) | ¹ |
 | 2 | **METALL 1,00M** | Metallschichtwiderstand 1 MΩ, 1 %, 0207 | Arbeitspunkt Piezo-Eingang | ✔ |
@@ -91,6 +91,7 @@ ESP32S3DK-C1N8R8   1
 MCP 6004-I/P       2
 GS 14P             2
 EPZ-20MS64W        4
+EPZ-15MS60W        2
 BAT85S-TAP         6
 METALL 10,0K      10
 METALL 1,00M       5
@@ -117,7 +118,6 @@ einige Stück mehr zu bestellen.
 |------|------|-------|
 | 1 | USB-Netzteil 5 V / 1 A + USB-C-Kabel (2 m) | Stromversorgung |
 | ca. 1 m | Litzen oder Jumper-Kabel, 6 Adern | LIS3DH-Anschluss (SPI) |
-| 2 (optional) | Piezo-Scheibe **Ø 12 mm**, z. B. Murata 7BB-12-9 (Mouser, DigiKey) | Versuch M5 „kleine Bauform“; bei Reichelt nicht gefunden |
 
 **Gesamtkosten Elektronik:** ca. 35–45 € inkl. Reserveteilen, plus Versand.
 
@@ -126,6 +126,12 @@ einige Stück mehr zu bestellen.
   Mit 1 MHz Bandbreite erreicht er bei Verstärkung 101 noch ~10 kHz. Das liegt über dem
   7-kHz-Filter und reicht deshalb. Die Pinbelegung ist identisch.
 - **Piezo:** EKULIT EPZ-20MS64W statt Murata. Er hat ebenfalls 20 mm, Messing und Litzen.
+- **Kleine Bauform:** EKULIT EPZ-15MS60W (Ø 15 mm) statt Murata 7BB-12-9. Die Murata-Scheibe
+  ist abgekündigt (End-of-Life 2024).
+- **Falls die EPZ-20MS64W nicht lieferbar ist**, gibt es bei Reichelt zwei gleichwertige Ersatztypen:
+  - **EPZ-20MS64:** gleiche Scheibe ohne Litzen. Zwei dünne Litzen selbst anlöten, mit kurzer Lötzeit,
+    damit sich die Keramik nicht ablöst.
+  - **EPZ-27MS44W:** Ø 27 mm mit Litzen. Etwas größer, liefert eher mehr Signal.
 
 ### Montage am Glas
 
@@ -313,7 +319,7 @@ Begleitend wird das [Messprotokoll](messprotokoll.md) geführt.
 | **M2 – Position** | Pendel 100 g / 10 cm auf Punkt A, je **5 Schläge**. Belegungen: A-P1/B-P3, A-P1/B-P4, A-P2/B-P5 | 3 × 5 Schläge | F1, F2 |
 | **M3 – Empfindlichkeit** | Sensoren auf P1 und P3 (bzw. bester Rahmenplatz). Alle Masse/Höhe-Stufen der Tabelle, je 5 Schläge, Punkt A | ~50 Schläge | F1, F3 |
 | **M4 – Aufprallort** | 100 g / 10 cm auf A, B, C, je 5 Schläge | 15 Schläge | F4 |
-| **M5 – Piezo-Größe** (optional) | Wie M2, aber Piezo Ø 12 mm statt 20 mm auf P1 | 5 Schläge | Bauform |
+| **M5 – Piezo-Größe** | Wie M2, aber Piezo Ø 15 mm (EPZ-15MS60W) statt 20 mm auf P1 | 5 Schläge | Bauform |
 | **M6 – Störquellen** | je 5×: Klopfen außen und innen (Knöchel), Haustür zuschlagen, Terrassentür schließen, **Schiebetür** öffnen und schließen, **ZIP-Screen** ab, auf und in die Endlage, Schritte vor dem Fenster, Gegenstand auf Fensterbank abstellen, Scheibe putzen (Abzieher) | ~50 Ereignisse | F5 |
 | **M7 – Langzeit** | 1–2 Wochen laufen lassen (Label `M7_langzeit`), Screen-Fahrten und Wetter notieren bzw. aus HA exportieren | Tage | F5, F6 |
 | **M8 – Montageart** (optional) | P1 mit Klebeband statt Wachs, sonst wie M2 | 5 Schläge | Dauermontage |
