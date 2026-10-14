@@ -50,26 +50,82 @@ Aus den Antworten folgen die Entscheidungen für den nächsten Schritt (Kapitel 
 
 ## 3. Stückliste
 
-Die Preise sind grobe Richtwerte. Bezugsquellen sind z. B. Reichelt, Berrybase,
-Eckstein, Mouser oder Amazon.
+Die Elektronik ist komplett bei **Reichelt Elektronik** bestellbar. Die einzige
+Ausnahme ist die optionale 12-mm-Piezoscheibe. Die Spalte „Reichelt-Nr.“ enthält die
+Artikelnummer, die man in die Suche oder die Schnellbestellung eingibt.
 
-### Elektronik
+> **Hinweis:** Die Artikelnummern wurden am 2026-10-14 per Websuche ermittelt.
+> reichelt.de selbst war dabei nicht direkt abrufbar.
+> - Nummern mit ✔ sind durch eine Reichelt-Produktseite belegt.
+> - Nummern mit ¹ folgen dem Reichelt-Namensschema, ihre Seite war in der Suche aber nicht auffindbar.
+>
+> Vor dem Bestellen bitte kurz im Shop gegenprüfen, vor allem Lagerstand und Preis.
 
-| Anz. | Teil | Zweck | ca. € |
-|------|------|-------|-------|
-| 1 | **ESP32-S3-DevKitC-1** (N8 oder N8R8) | Mikrocontroller, WLAN, ADC | 15 |
-| 1 (+1) | **LIS3DH-Breakout** (z. B. Adafruit 2809 oder kompatibel, **mit SPI-Pins**) | MEMS-Beschleunigungssensor | 6 |
-| 1 (+1) | **MCP6024-I/P** (4-fach-OpAmp, Rail-to-Rail, DIP-14) + IC-Sockel | Piezo-Verstärker | 3 |
-| 4 | Piezo-Scheibe **Ø 20 mm** mit Messing-Träger (z. B. Murata 7BB-20-6L0) | Sensor (2 im Einsatz, 2 Reserve) | 4 |
-| 2 | Piezo-Scheibe **Ø 12 mm** (z. B. Murata 7BB-12-9) | Test für kleine Bauform | 3 |
-| 4 | Schottky-Diode **BAT85** | Überspannungsschutz am Eingang | 1 |
-| – | Widerstände: 4× 10 kΩ, 2× 1 MΩ, 2× 100 kΩ, 2× 1 kΩ (Gain), 2× 1 kΩ (Ausgang), 2× 100 kΩ (Vref-Teiler) | | 1 |
-| – | Kondensatoren: 2× 10 µF (Gain-Zweig), 1× 10 µF + 1× 100 nF (Vref), 2× 22 nF (Ausgangsfilter), 1× 100 nF (OpAmp-Versorgung) | | 2 |
-| 2 | Jumper + Stiftleisten | Verstärkung 11 oder 101 umschalten | 1 |
-| 1 | Lochrasterplatine ca. 7 × 5 cm, Buchsenleisten für das DevKit | | 3 |
-| 2 × 2 m | **Geschirmtes** 2-adriges Kabel (Mikrofonkabel) | Piezo-Zuleitungen; ungeschirmt fängt man Netzbrummen ein | 4 |
-| 1 × 1 m | dünnes 6-adriges Flachkabel oder Litzen | LIS3DH-Anschluss (SPI) | 2 |
-| 1 | USB-Netzteil 5 V / 1 A + USB-C-Kabel (2 m) | Stromversorgung | – |
+### Elektronik (Reichelt)
+
+| Anz. | Reichelt-Nr. | Beschreibung | Zweck | |
+|------|--------------|--------------|-------|---|
+| 1 | **ESP32S3DK-C1N8R8** | Espressif ESP32-S3-DevKitC-1, WROOM-1-N8R8 (8 MB Flash, 8 MB PSRAM) | Mikrocontroller, WLAN, ADC | ✔ ca. 17,50 € |
+| 1 (+1) | Shop-Nr. **235486** (Suche „LIS3DH“) | Adafruit 2809, Entwicklerboard Beschleunigungssensor 3-Achsen LIS3DH, I²C/SPI | MEMS-Beschleunigungssensor | ✔ |
+| 1 (+1) | **MCP 6004-I/P** | Microchip MCP6004, 4-fach-OpAmp, Rail-to-Rail, 1 MHz, DIP-14 | Piezo-Verstärker | ✔ |
+| 1 (+1) | **GS 14P** | IC-Sockel 14-polig, Präzision | Sockel für den OpAmp | ✔ ca. 0,25 € |
+| 4 | **EPZ-20MS64W** | EKULIT Piezo-Element Ø 20 mm, Messing, 35 nF, mit Litzen | Sensor (2 im Einsatz, 2 Reserve) | ✔ ca. 0,45 € |
+| 4 | **BAT85S-TAP** | Vishay Schottky-Diode 30 V, 0,2 A, DO-35 | Überspannungsschutz am Eingang | ✔ |
+| 4 | **METALL 10,0K** | Metallschichtwiderstand 10 kΩ, 1 %, 0207 | 2× Eingangsschutz, 2× Rg (Verstärkung 11) | ¹ |
+| 2 | **METALL 1,00M** | Metallschichtwiderstand 1 MΩ, 1 %, 0207 | Arbeitspunkt Piezo-Eingang | ✔ |
+| 4 | **METALL 100K** | Metallschichtwiderstand 100 kΩ, 1 %, 0207 | 2× Rf, 2× Vref-Teiler | ¹ |
+| 4 | **METALL 1,00K** | Metallschichtwiderstand 1 kΩ, 1 %, 0207 | 2× Rg (Verstärkung 101), 2× Ausgangsfilter | ✔ |
+| 3 | **RAD 10/63** | Elko 10 µF, 63 V, radial, 5 × 11 mm | 2× Gain-Zweig, 1× Vref | ✔ |
+| 2 | **Z5U-2,5 100N** | Vielschicht-Keramik 100 nF, RM 2,5 | Vref, OpAmp-Versorgung | ✔ ca. 0,04 € |
+| 2 | **MKS2-100 22N** | WIMA Folienkondensator 22 nF, 5 %, RM 5 | Anti-Aliasing-Filter | ✔ |
+| 1 | **SL 1X40G 2,54** | Stiftleiste 40-polig, gerade | Jumper-Pins für die Verstärkung, Anschlüsse | ✔ ca. 0,30 € |
+| 3 | **BL 1X20G8 2,54** | Buchsenleiste 20-polig, gerade | Steckplatz für das DevKit (2 × 22 Pins, Reststücke aus der dritten Leiste) | ✔ |
+| 2 | **JUMPER 2,54 BL** | Kurzschlussbrücke, blau | Verstärkung 11/101 umschalten | ✔ |
+| 1 | Shop-Nr. **8269** (Suche „Lochraster 75x100“) | Rademacher Lochrasterplatine Hartpapier 75 × 100 mm, RM 2,54 | Verstärker-Platine | ✔ |
+| 1 | **ML 238-5** | BKL Mikrofon-Flachkabel 2 × 0,38 mm², einzeln geschirmt, 5-m-Ring | Piezo-Zuleitungen. Die beiden Adern lassen sich trennen, so bekommt jeder Piezo eine geschirmte Ader | ✔ |
+
+**Für die Reichelt-Schnellbestellung** (Artikelnummer und Menge, inkl. Reserve):
+
+```
+ESP32S3DK-C1N8R8   1
+MCP 6004-I/P       2
+GS 14P             2
+EPZ-20MS64W        4
+BAT85S-TAP         6
+METALL 10,0K      10
+METALL 1,00M       5
+METALL 100K       10
+METALL 1,00K      10
+RAD 10/63          5
+Z5U-2,5 100N       5
+MKS2-100 22N       4
+SL 1X40G 2,54      1
+BL 1X20G8 2,54     3
+JUMPER 2,54 BL     4
+ML 238-5           1
+```
+
+Das LIS3DH-Board (Shop-Nr. 235486) und die Lochrasterplatine (Shop-Nr. 8269) bitte
+über die Shop-Suche in den Warenkorb legen, ihre Artikelnummer ist nicht bekannt.
+
+Widerstände und Kondensatoren kosten nur Cent-Beträge. Es lohnt sich, jeweils
+einige Stück mehr zu bestellen.
+
+### Elektronik (vorhanden oder andere Quelle)
+
+| Anz. | Teil | Zweck |
+|------|------|-------|
+| 1 | USB-Netzteil 5 V / 1 A + USB-C-Kabel (2 m) | Stromversorgung |
+| ca. 1 m | Litzen oder Jumper-Kabel, 6 Adern | LIS3DH-Anschluss (SPI) |
+| 2 (optional) | Piezo-Scheibe **Ø 12 mm**, z. B. Murata 7BB-12-9 (Mouser, DigiKey) | Versuch M5 „kleine Bauform“; bei Reichelt nicht gefunden |
+
+**Gesamtkosten Elektronik:** ca. 35–45 € inkl. Reserveteilen, plus Versand.
+
+**Änderungen gegenüber dem ersten Entwurf:**
+- **OpAmp:** MCP6004 statt MCP6024, weil der MCP6024 bei Reichelt nicht gefunden wurde.
+  Mit 1 MHz Bandbreite erreicht er bei Verstärkung 101 noch ~10 kHz. Das liegt über dem
+  7-kHz-Filter und reicht deshalb. Die Pinbelegung ist identisch.
+- **Piezo:** EKULIT EPZ-20MS64W statt Murata. Er hat ebenfalls 20 mm, Messing und Litzen.
 
 ### Montage am Glas
 
@@ -90,8 +146,6 @@ Eckstein, Mouser oder Amazon.
 | Zollstock oder Maßband, Kreide oder Klebeband zum Markieren | Auslenkung reproduzierbar einstellen |
 | Smartphone mit Zeitlupe (optional) | Aufprallgeschwindigkeit kontrollieren |
 
-**Gesamtkosten Elektronik:** ca. 50 € (mit Reserveteilen).
-
 ---
 
 ## 4. Schaltung
@@ -105,7 +159,7 @@ der ADC positive und negative Ausschläge sieht.
 ```
                        3V3                                       3V3
                         │                                         │
-                      BAT85 (Kathode an 3V3)                    ──┴── MCP6024 Pin 4 (V+), 100 nF nach GND
+                      BAT85 (Kathode an 3V3)                    ──┴── MCP6004 Pin 4 (V+), 100 nF nach GND
                         │                                         Pin 11 (V−) an GND
  Piezo (+) ──[10k]──────●───────────────▶ IN+  (Pin 3)
  (Mittelelektrode)      │                         ┌────────┐
@@ -135,7 +189,7 @@ Kanal 1 ist identisch aufgebaut: U1B (Pins 5/6/7) an **GPIO2**.
 | Bauteil | Funktion |
 |---------|----------|
 | 10 kΩ + 2× BAT85 | begrenzt Spannungsspitzen bei harten Schlägen; Piezos können mehrere Dutzend Volt liefern |
-| 1 MΩ nach Vref | Arbeitspunkt; bildet mit der Piezo-Kapazität (~20 nF) einen Hochpass bei ~8 Hz und unterdrückt Wind- und Temperaturdrift |
+| 1 MΩ nach Vref | Arbeitspunkt; bildet mit der Piezo-Kapazität (EPZ-20MS64W: 35 nF) einen Hochpass bei ~5 Hz und unterdrückt Wind- und Temperaturdrift |
 | Rf / Rg + 10 µF | Wechselspannungs-Verstärkung 11 bzw. 101, Gleichspannungs-Verstärkung 1, kein Übersteuern durch Offset |
 | 1 kΩ + 22 nF | Tiefpass ~7 kHz gegen Aliasing (Abtastung 20 kHz) |
 
@@ -259,7 +313,7 @@ Begleitend wird das [Messprotokoll](messprotokoll.md) geführt.
 | **M2 – Position** | Pendel 100 g / 10 cm auf Punkt A, je **5 Schläge**. Belegungen: A-P1/B-P3, A-P1/B-P4, A-P2/B-P5 | 3 × 5 Schläge | F1, F2 |
 | **M3 – Empfindlichkeit** | Sensoren auf P1 und P3 (bzw. bester Rahmenplatz). Alle Masse/Höhe-Stufen der Tabelle, je 5 Schläge, Punkt A | ~50 Schläge | F1, F3 |
 | **M4 – Aufprallort** | 100 g / 10 cm auf A, B, C, je 5 Schläge | 15 Schläge | F4 |
-| **M5 – Piezo-Größe** | Wie M2, aber Piezo Ø 12 mm statt 20 mm auf P1 | 5 Schläge | Bauform |
+| **M5 – Piezo-Größe** (optional) | Wie M2, aber Piezo Ø 12 mm statt 20 mm auf P1 | 5 Schläge | Bauform |
 | **M6 – Störquellen** | je 5×: Klopfen außen und innen (Knöchel), Haustür zuschlagen, Terrassentür schließen, **Schiebetür** öffnen und schließen, **ZIP-Screen** ab, auf und in die Endlage, Schritte vor dem Fenster, Gegenstand auf Fensterbank abstellen, Scheibe putzen (Abzieher) | ~50 Ereignisse | F5 |
 | **M7 – Langzeit** | 1–2 Wochen laufen lassen (Label `M7_langzeit`), Screen-Fahrten und Wetter notieren bzw. aus HA exportieren | Tage | F5, F6 |
 | **M8 – Montageart** (optional) | P1 mit Klebeband statt Wachs, sonst wie M2 | 5 Schläge | Dauermontage |
