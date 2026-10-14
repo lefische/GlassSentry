@@ -82,7 +82,7 @@ Artikelnummer, die man in die Suche oder die Schnellbestellung eingibt.
 | 3 | **BL 1X20G8 2,54** | Buchsenleiste 20-polig, gerade | Steckplatz für das DevKit (2 × 22 Pins, Reststücke aus der dritten Leiste) | ✔ |
 | 2 | **JUMPER 2,54 BL** | Kurzschlussbrücke, blau | Verstärkung 11/101 umschalten | ✔ |
 | 1 | Shop-Nr. **8269** (Suche „Lochraster 75x100“) | Rademacher Lochrasterplatine Hartpapier 75 × 100 mm, RM 2,54 | Verstärker-Platine | ✔ |
-| 1 | **ML 238-5** | BKL Mikrofon-Flachkabel 2 × 0,38 mm², einzeln geschirmt, 5-m-Ring | Piezo-Zuleitungen. Die beiden Adern lassen sich trennen, so bekommt jeder Piezo eine geschirmte Ader | ✔ |
+| 1 | **ML 214-10** | BKL Mikrofon-Flachkabel (Diodenleitung) 2 × 0,14 mm², geschirmt, 10-m-Ring | Piezo-Zuleitungen. Die beiden Adern lassen sich trennen, so bekommt jeder Piezo eine geschirmte Ader. Ersetzt das nicht mehr lieferbare ML 238-5 | ✔ ca. 9,99 € |
 
 **Für die Reichelt-Schnellbestellung** (Artikelnummer und Menge, inkl. Reserve):
 
@@ -102,7 +102,7 @@ MKS2-100 22N       4
 SL 1X40G 2,54      1
 BL 1X20G8 2,54     3
 JUMPER 2,54 BL     4
-ML 238-5           1
+ML 214-10          1
 ```
 
 Das LIS3DH-Board (Shop-Nr. 235486) und die Lochrasterplatine (Shop-Nr. 8269) bitte
